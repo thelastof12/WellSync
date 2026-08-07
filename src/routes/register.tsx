@@ -40,7 +40,7 @@ const schema = z
   });
 
 function RegisterPage() {
-  const { signIn } = useHealthStore();
+  const { signUp } = useHealthStore();
   const navigate = useNavigate();
   const [values, setValues] = useState({ fullName: "", email: "", password: "", confirm: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -49,7 +49,7 @@ function RegisterPage() {
   const set = (k: keyof typeof values) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setValues({ ...values, [k]: e.target.value });
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const parsed = schema.safeParse(values);
     if (!parsed.success) {
@@ -62,12 +62,14 @@ function RegisterPage() {
     }
     setErrors({});
     setLoading(true);
-    setTimeout(() => {
-      signIn(parsed.data.email, parsed.data.fullName);
-      setLoading(false);
-      toast.success("Account created — let's set up your health profile");
-      navigate({ to: "/onboarding" });
-    }, 600);
+    const { error } = await signUp(parsed.data.email, parsed.data.password, parsed.data.fullName);
+    setLoading(false);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+    toast.success("Account created — let's set up your health profile");
+    navigate({ to: "/onboarding" });
   };
 
   const fields: Array<{ k: keyof typeof values; label: string; type: string; ph: string }> = [

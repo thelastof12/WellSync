@@ -42,7 +42,7 @@ function ReportsPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `vitality-report-${range}d.csv`;
+    a.download = `wellsync-report-${range}d.csv`;
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Report exported as CSV.");

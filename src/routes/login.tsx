@@ -30,11 +30,11 @@ const schema = z.object({
 function LoginPage() {
   const { signIn } = useHealthStore();
   const navigate = useNavigate();
-  const [values, setValues] = useState({ email: "prince.karikari@example.com", password: "vitality123" });
+  const [values, setValues] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const parsed = schema.safeParse(values);
     if (!parsed.success) {
@@ -47,12 +47,14 @@ function LoginPage() {
     }
     setErrors({});
     setLoading(true);
-    setTimeout(() => {
-      signIn(parsed.data.email);
-      setLoading(false);
-      toast.success("Welcome back to WellSync");
-      navigate({ to: "/app" });
-    }, 600);
+    const { error } = await signIn(parsed.data.email, parsed.data.password);
+    setLoading(false);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+    toast.success("Welcome back to WellSync");
+    navigate({ to: "/app" });
   };
 
   return (

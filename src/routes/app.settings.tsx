@@ -76,7 +76,7 @@ function SettingsPage() {
                 variant="outline"
                 className="rounded-full"
                 onClick={() => {
-                  signOut();
+                  void signOut();
                   toast.success("Signed out of all devices.");
                   navigate({ to: "/login" });
                 }}
@@ -88,7 +88,7 @@ function SettingsPage() {
 
           <Panel title="Help & support" accent="var(--butter)">
             <p className="text-sm text-muted-foreground">
-              Questions about tracking, insights or your account? Reach the team at support@vitality.health and we'll
+              Questions about tracking, insights or your account? Reach the team at support@wellsync.health and we'll
               reply within one working day.
             </p>
           </Panel>

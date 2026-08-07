@@ -111,7 +111,7 @@ export function AppShell({
   const unread = notifications.filter((n) => !n.read).length;
 
   const handleSignOut = () => {
-    signOut();
+    void signOut();
     toast.success("Signed out");
     navigate({ to: "/login" });
   };
